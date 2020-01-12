@@ -7,8 +7,7 @@
 
 ### Dependencies
 - Dotnet Core 3.0
-
-
+- FamilyTreeLibrary https://github.com/endian02/FamilyTreeLibrary
 
 ### License 
 - Apache 2.0
