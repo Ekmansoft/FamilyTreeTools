@@ -1,13 +1,9 @@
-### FamilyTreeLibrary
-- Dotnet Core C# library for managing genealogy family trees
+### FamilyTreeTools
+- Dotnet Core C# library for analysing and comparing genealogy family trees.
 
 ### Description
-#### FamilyData
-- Code and data structure for working with profiles (Individuals) and families inspired from the GEDCOM data format.
-
-#### FamilyTreeStore
-- Code structure independent of storage type, to allow local trees and web trees to be compared.
-- Also intended to be used for family trees on the internet like http://Geni.com. 
+- Sanity Check tool to check for missing data, and inconsistencies in a family tree.
+- Tree comparison tool that can be used to fing connecting branches between two trees and to find duplicates in one tree.
 
 ### Dependencies
 - Dotnet Core 3.0
