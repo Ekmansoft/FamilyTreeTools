@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.Serialization;
+using System.Text.Json;
 using FamilyTreeLibrary.FamilyData;
 using FamilyTreeLibrary.FamilyTreeStore;
 
@@ -10,6 +11,7 @@ namespace FamilyTreeTools.CompareResults
   class FamilyTreeCompareResults
   {
   }
+
 
   [DataContract]
   public class DuplicateTreeItems
@@ -258,6 +260,7 @@ namespace FamilyTreeTools.CompareResults
       return false;
     }
 
+
     public static void SearchDuplicates(IndividualClass person1, IFamilyTreeStoreBaseClass familyTree1, IFamilyTreeStoreBaseClass familyTree2, ReportCompareResult reportDuplicate, IProgressReporterInterface reporter = null, NameEquivalenceDb nameEqDb = null)
     {
       IndividualEventClass birth = person1.GetEvent(IndividualEventClass.EventType.Birth);
@@ -270,8 +273,18 @@ namespace FamilyTreeTools.CompareResults
       if (((birth != null) && (birth.GetDate() != null) && (birth.GetDate().ValidDate())) ||
           ((death != null) && (death.GetDate() != null) && (death.GetDate().ValidDate())))
       {
-        string fullName = person1.GetName().Replace("*", "");
-        IEnumerator<IndividualClass> iterator2 = familyTree2.SearchPerson(fullName);
+        string searchString;
+
+        if (familyTree2.GetCapabilities().jsonSearch)
+        {
+          searchString = SearchDescriptor.ToJson(SearchDescriptor.GetSearchDescriptor(person1));
+        }
+        else
+        {
+          searchString = person1.GetName().Replace("*", "");
+        }
+
+        IEnumerator<IndividualClass> iterator2 = familyTree2.SearchPerson(searchString);
         int cnt2 = 0;
 
         if (iterator2 != null)
@@ -298,7 +311,7 @@ namespace FamilyTreeTools.CompareResults
           } while (iterator2.MoveNext());
 
           iterator2.Dispose();
-          trace.TraceInformation(" " + fullName + " matched with " + cnt2 + "," + cnt3);
+          trace.TraceInformation(" " + searchString + " matched with " + cnt2 + "," + cnt3);
         }
 
         if (cnt2 == 0) // No matches found for full name
