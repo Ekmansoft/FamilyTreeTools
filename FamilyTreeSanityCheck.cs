@@ -1509,7 +1509,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
           int ageToday = ToYears(DateTime.Now - birth.GetDate().ToDateTime());
           int minAge = limits.missingPartner.value;
 
-          if ((personAge >= 18) && (ageToday >= minAge))
+          if ((personAge >= 40) && (ageToday >= minAge))
           {
             IList<FamilyXrefClass> spouseList = person.GetFamilySpouseList();
 
@@ -1872,10 +1872,13 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
           }
           if ((marriage == null) && (mother.person != null) && (father.person != null))
           {
-            trace.TraceInformation(" Missing marriage date " + family.GetXrefName());
-            RelationStack stack = CopyStackAndAddPerson(relationStack, family, mother.person);
-            AddToList(mother.person, stack, depth, SanityCheckLimits.SanityProblemId.missingWeddingDate_e,
-               "Missing marriage date between " + father.person.GetName() + " and " + mother.person.GetName());
+            if ((father.person.GetName().Length > 5) && (mother.birth != null) && (father.birth != null))
+            {
+              trace.TraceInformation(" Missing marriage date " + family.GetXrefName());
+              RelationStack stack = CopyStackAndAddPerson(relationStack, family, mother.person);
+              AddToList(mother.person, stack, depth, SanityCheckLimits.SanityProblemId.missingWeddingDate_e,
+                 "Missing marriage date between " + father.person.GetName() + " and " + mother.person.GetName());
+            }
           }
         }
       }
@@ -2135,7 +2138,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
           }
           if ((marriage != null) && (marriage.GetDate().ToDateTime().Year < limits.endYear.value))
           {
-            if ((childrenPerYear < 0.3) && (motherMarriedAtAge < 40))
+            if ((childrenPerYear < 0.3) && (motherMarriedAtAge < 35))
             {
               //maxNoOfChildren = childList.Count;
               RelationStack stack = CopyStackAndAddPerson(relationStack, family, parentRef);
