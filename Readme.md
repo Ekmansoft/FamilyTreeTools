@@ -6,7 +6,7 @@
 - Tree comparison tool that can be used to fing connecting branches between two trees and to find duplicates in one tree.
 
 ### Dependencies
-- Dotnet Core 3.0
+- Dotnet Core 3.1
 - FamilyTreeLibrary https://github.com/endian02/FamilyTreeLibrary
 
 ### License 
