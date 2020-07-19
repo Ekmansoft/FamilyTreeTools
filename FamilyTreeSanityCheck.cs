@@ -1886,6 +1886,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
       {
         maxNoOfParents = parentList.Count;
       }*/
+      //if ((mother.birth != null)  || (father.birth != null))
       {
         IList<IndividualXrefClass> childList = family.GetChildList();
         if (childList != null)
@@ -2469,7 +2470,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
                     break;
                 }
               }
-              if(familyList.Length > 0)
+              if (familyList.Length > 0)
               {
                 familyList = " (" + familyList + ")";
               }
@@ -2483,7 +2484,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
             {
               FamilyClass family = familyTree.GetFamily(familyXref.GetXrefName());
 
-              SanityCheckFamily(family, relationStack, depth + 1);
+              SanityCheckFamily(family, relationStack, depth);
             }
           }
 
@@ -2507,7 +2508,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
                     if (spouse != null)
                     {
                       CheckAndAddRelation(ref relationStack, family, spouse);
-                      SanityCheckIndividual(spouse, relationStack, depth + 1);
+                      SanityCheckIndividual(spouse, relationStack, depth);
                     }
                   }
                 }
@@ -2750,56 +2751,88 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
         if (spouseList != null)
         {
           trace.TraceData(TraceEventType.Information, 0, "Depth:" + descendantDepth + ", Spouses: " + spouseList.Count);
+          bool processChildren = true;
 
-          foreach (FamilyXrefClass familyXref in spouseList)
+          if (limits.endYear.active)
           {
-            trace.TraceInformation(" Descendant:person (" + person.GetName() + ") family " + familyXref.ToString());
-            FamilyClass family = familyTree.GetFamily(familyXref.GetXrefName());
-
-            if (family != null)
+            foreach (FamilyXrefClass familyXref in spouseList)
             {
-              IList<IndividualXrefClass> childXrefList = family.GetChildList();
-
-              if (childXrefList != null)
+              trace.TraceInformation(" Descendant:person birth check (" + person.GetName() + ") family " + familyXref.ToString());
+              FamilyClass family = familyTree.GetFamily(familyXref.GetXrefName());
+              IList<IndividualXrefClass> parentXrefList = family.GetParentList();
+              foreach (IndividualXrefClass parentXref in parentXrefList)
               {
-                int parentNo = 0;
-                foreach (IndividualXrefClass childXref in childXrefList)
+                IndividualClass parent = familyTree.GetIndividual(parentXref.GetXrefName());
+                if ((parent != null) && processChildren)
                 {
-                  IndividualClass child = familyTree.GetIndividual(childXref.GetXrefName());
-                  if (child != null)
+                  IndividualEventClass birth = parent.GetEvent(IndividualEventClass.EventType.Birth);
+
+                  if ((birth.GetDate() != null) && birth.GetDate().ValidDate())
                   {
-                    trace.TraceInformation(" Descendant:person (" + person.GetName() + ") child " + child.GetName());
+                    DateTime birthDate = birth.GetDate().ToDateTime();
 
-                    trace.TraceInformation("Progress = " + progress.ToString("P2"));
-                    if (progressReporter != null)
+                    if (limits.endYear.value < birthDate.Year)
                     {
-                      progressReporter.ReportProgress(latestPercent * 100.0, "Analyzing: " + analysedPeople.Count + " people and " + sanityCheckedFamilies.Count + " families. Found " + ancestorList.Count + " problems...");
-                      if(progressReporter.CheckIfStopRequested())
-                      {
-                        trace.TraceEvent(TraceEventType.Warning, 0, "Stop requested!");
-                        StopRequested = true;
-                      }
-                    }
-                    if (!StopRequested)
-                    {
-                      RelationStack stack2 = relationStack.Duplicate();
-
-                      AnalyseDescendants(child, descendantDepth - 1, depth + 1, progress, stack2, Relation.GetChildRelation(child));
+                      trace.TraceEvent(TraceEventType.Information, 0, "Stop processing due to endyear reached " + limits.endYear.value + " " + parent.GetName() + " " + birthDate.ToString());
+                      processChildren = false;
                     }
                   }
-                  else
-                  {
-                    trace.TraceEvent(TraceEventType.Error, 0, "Error person " + childXref.GetXrefName() + " not found in database!");
-                  }
-                  parentNo++;
                 }
               }
             }
-            else
-            {
-              trace.TraceEvent(TraceEventType.Error, 0, "Error family " + familyXref.ToString() + " not found in database!");
-            }
+          }
 
+          if (processChildren)
+          {
+            foreach (FamilyXrefClass familyXref in spouseList)
+            {
+              trace.TraceInformation(" Descendant:person (" + person.GetName() + ") family " + familyXref.ToString());
+              FamilyClass family = familyTree.GetFamily(familyXref.GetXrefName());
+
+              if (family != null)
+              {
+                IList<IndividualXrefClass> childXrefList = family.GetChildList();
+
+                if (childXrefList != null)
+                {
+                  int parentNo = 0;
+                  foreach (IndividualXrefClass childXref in childXrefList)
+                  {
+                    IndividualClass child = familyTree.GetIndividual(childXref.GetXrefName());
+                    if (child != null)
+                    {
+                      trace.TraceInformation(" Descendant:person (" + person.GetName() + ") child " + child.GetName());
+
+                      trace.TraceInformation("Progress = " + progress.ToString("P2"));
+                      if (progressReporter != null)
+                      {
+                        progressReporter.ReportProgress(latestPercent * 100.0, "Analyzing: " + analysedPeople.Count + " people and " + sanityCheckedFamilies.Count + " families. Found " + ancestorList.Count + " problems...");
+                        if (progressReporter.CheckIfStopRequested())
+                        {
+                          trace.TraceEvent(TraceEventType.Warning, 0, "Stop requested!");
+                          StopRequested = true;
+                        }
+                      }
+                      if (!StopRequested)
+                      {
+                        RelationStack stack2 = relationStack.Duplicate();
+
+                        AnalyseDescendants(child, descendantDepth - 1, depth + 1, progress, stack2, Relation.GetChildRelation(child));
+                      }
+                    }
+                    else
+                    {
+                      trace.TraceEvent(TraceEventType.Error, 0, "Error person " + childXref.GetXrefName() + " not found in database!");
+                    }
+                    parentNo++;
+                  }
+                }
+              }
+              else
+              {
+                trace.TraceEvent(TraceEventType.Error, 0, "Error family " + familyXref.ToString() + " not found in database!");
+              }
+            }
           }
         }
         else
@@ -2807,6 +2840,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
           trace.TraceInformation(" person (" + person.GetName() + ") spouse family = null");
         }
       }
+
     }
 
     public void Print()
