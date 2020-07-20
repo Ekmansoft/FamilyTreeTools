@@ -2767,7 +2767,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
                 {
                   IndividualEventClass birth = parent.GetEvent(IndividualEventClass.EventType.Birth);
 
-                  if ((birth.GetDate() != null) && birth.GetDate().ValidDate())
+                  if ((birth != null) && (birth.GetDate() != null) && birth.GetDate().ValidDate())
                   {
                     DateTime birthDate = birth.GetDate().ToDateTime();
 
