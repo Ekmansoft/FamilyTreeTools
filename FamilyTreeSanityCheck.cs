@@ -170,7 +170,11 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
     [DataMember]
     public SanityProperty inexactBirthDeath;
     [DataMember]
-    public SanityProperty unknownBirthDeath;
+    public SanityProperty unknownBirth;
+    [DataMember]
+    public SanityProperty unknownDeath;
+    [DataMember]
+    public SanityProperty unknownDeathEmigrated;
     [DataMember]
     public SanityProperty parentsMissing;
     [DataMember]
@@ -212,7 +216,10 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
       daysBetweenChildren_e,
       twins_e,
       inexactBirthDeath_e,
-      unknownBirthDeath_e,
+      //unknownBirthDeath_e,
+      unknownBirth_e,
+      unknownDeath_e,
+      unknownDeathEmigrated_e,
       parentsMissing_e,
       parentsProblem_e,
       marriageProblem_e,
@@ -271,8 +278,14 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
       inexactBirthDeath = new SanityProperty();
       inexactBirthDeath.active = true;
 
-      unknownBirthDeath = new SanityProperty();
-      unknownBirthDeath.active = true;
+      unknownBirth = new SanityProperty();
+      unknownBirth.active = true;
+
+      unknownDeath = new SanityProperty();
+      unknownDeath.active = true;
+
+      unknownDeathEmigrated = new SanityProperty();
+      unknownDeathEmigrated.active = true;
 
       parentsMissing = new SanityProperty();
       parentsMissing.active = true;
@@ -332,7 +345,9 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
       sanityArray.Add(SanityProblemId.daysBetweenChildren_e, daysBetweenChildren);
       sanityArray.Add(SanityProblemId.twins_e, twins);
       sanityArray.Add(SanityProblemId.inexactBirthDeath_e, inexactBirthDeath);
-      sanityArray.Add(SanityProblemId.unknownBirthDeath_e, unknownBirthDeath);
+      sanityArray.Add(SanityProblemId.unknownBirth_e, unknownBirth);
+      sanityArray.Add(SanityProblemId.unknownDeath_e, unknownDeath);
+      sanityArray.Add(SanityProblemId.unknownDeathEmigrated_e, unknownDeathEmigrated);
       sanityArray.Add(SanityProblemId.parentsMissing_e, parentsMissing);
       sanityArray.Add(SanityProblemId.parentsProblem_e, parentsProblem);
       sanityArray.Add(SanityProblemId.marriageProblem_e, marriageProblem);
@@ -1474,8 +1489,8 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
       }
 
 
-      SanityCheckLimits.SanityProblemId birthEvType = SanityCheckLimits.SanityProblemId.unknownBirthDeath_e;
-      SanityCheckLimits.SanityProblemId deathEvType = SanityCheckLimits.SanityProblemId.unknownBirthDeath_e;
+      SanityCheckLimits.SanityProblemId birthEvType = SanityCheckLimits.SanityProblemId.unknownBirth_e;
+      SanityCheckLimits.SanityProblemId deathEvType = SanityCheckLimits.SanityProblemId.unknownDeath_e;
 
       bool birthPlaceKnown = GetPlaceStr(birth).Length > 15;
       bool deathPlaceKnown = GetPlaceStr(death).Length > 15;
@@ -1489,7 +1504,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
         {
           case FamilyDateTimeClass.FamilyDateType.Unknown:
             birthDate = "Unknown";
-            birthEvType = SanityCheckLimits.SanityProblemId.unknownBirthDeath_e;
+            birthEvType = SanityCheckLimits.SanityProblemId.unknownBirth_e;
             break;
           case FamilyDateTimeClass.FamilyDateType.Year:
           case FamilyDateTimeClass.FamilyDateType.YearMonth:
@@ -1531,7 +1546,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
       else
       {
         birthDate = "Unknown";
-        birthEvType = SanityCheckLimits.SanityProblemId.unknownBirthDeath_e;
+        birthEvType = SanityCheckLimits.SanityProblemId.unknownBirth_e;
       }
 
       bool checkEmigration = false;
@@ -1544,7 +1559,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
             case FamilyDateTimeClass.FamilyDateType.Unknown:
               deathDate = "Unknown";
               checkEmigration = true;
-              deathEvType = SanityCheckLimits.SanityProblemId.unknownBirthDeath_e;
+              deathEvType = SanityCheckLimits.SanityProblemId.unknownDeath_e;
               break;
             case FamilyDateTimeClass.FamilyDateType.Year:
             case FamilyDateTimeClass.FamilyDateType.YearMonth:
@@ -1562,7 +1577,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
         else if (person.GetIsAlive() != IndividualClass.Alive.Yes)
         {
           deathDate = "Unknown";
-          deathEvType = SanityCheckLimits.SanityProblemId.unknownBirthDeath_e;
+          deathEvType = SanityCheckLimits.SanityProblemId.unknownDeath_e;
           checkEmigration = true;
         }
       }
@@ -1588,9 +1603,13 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
       {
         string append = "";
 
-        if(checkEmigration && SearchKeyword(person, "emigrera;emigrate"))
+        if (checkEmigration && SearchKeyword(person, "emigrera;emigrate"))
         {
           append = " (Note: Emigrated)";
+          if (deathEvType == SanityCheckLimits.SanityProblemId.unknownDeath_e)
+          {
+            deathEvType = SanityCheckLimits.SanityProblemId.unknownDeathEmigrated_e;
+          }
         }
         AddToList(person, relationStack, depth, deathEvType, deathDate + " death date" + append);
       }
@@ -2106,11 +2125,11 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
           }
           if ((marriage != null) && marriage.GetDate().ValidDate())
           {
-            marriageExtension = ", married ";
+            marriageExtension = ", married in " + marriage.GetDate().ToDateTime().Year.ToString();
             if (mother.birth != DateTime.MinValue)
             {
               motherMarriedAtAge = ToYears(marriage.GetDate().ToDateTime() - mother.birth);
-              marriageExtension += " at age " + motherMarriedAtAge;
+              marriageExtension += ", at age " + motherMarriedAtAge;
             }
             if ((mother.death != DateTime.MinValue) || (father.death != DateTime.MinValue))
             {
@@ -2126,7 +2145,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
                   firstDeath = father.death;
                 }
               }
-              marriageExtension += " " + ToYears(firstDeath - marriage.GetDate().ToDateTime()) + " years before death";
+              marriageExtension += ", before " + ToYears(firstDeath - marriage.GetDate().ToDateTime()) + " years together";
               if (ToYears(firstDeath - marriage.GetDate().ToDateTime()) == 0)
               {
                 childrenPerYear = 1000;
