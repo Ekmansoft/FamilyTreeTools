@@ -1951,7 +1951,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
                   if ((marriage != null) && marriage.GetDate().ValidDate())
                   {
                     DateTime birthTime = birth.GetDate().ToDateTime();
-                    DateTime marriageDate = birth.GetDate().ToDateTime();
+                    DateTime marriageDate = marriage.GetDate().ToDateTime();
                     int yearsAfterMarriage = ToYears(birthTime - marriageDate);
                     if (yearsAfterMarriage < 0)
                     {

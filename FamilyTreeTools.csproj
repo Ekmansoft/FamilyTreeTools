@@ -2,8 +2,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Authors>Kenneth Ekman</Authors>
+    <PackageLicenseFile>LICENSE-2.0.txt</PackageLicenseFile>
+    <RepositoryUrl>https://github.com/endian02/FamilyTreeTools</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>Genealogy</PackageTags>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\FamilyTreeLibrary\FamilyTreeLibrary.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="LICENSE-2.0.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 </Project>
