@@ -10,6 +10,7 @@
     <RepositoryUrl>https://github.com/endian02/FamilyTreeTools</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>Genealogy</PackageTags>
+    <PackageId>endian.FamilyTree.Tools</PackageId>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\FamilyTreeLibrary\FamilyTreeLibrary.csproj" />
