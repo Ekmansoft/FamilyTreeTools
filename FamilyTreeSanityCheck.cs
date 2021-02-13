@@ -1,4 +1,9 @@
-﻿using System;
+﻿using FamilyTreeLibrary.FamilyData;
+using FamilyTreeLibrary.FamilyTreeStore;
+//using FamilyTreeLibrary.FamilyTreeStore;
+//using System.Threading.Tasks;
+using FamilyTreeTools.CompareResults;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -6,11 +11,6 @@ using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
-using FamilyTreeLibrary.FamilyData;
-using FamilyTreeLibrary.FamilyTreeStore;
-//using FamilyTreeLibrary.FamilyTreeStore;
-//using System.Threading.Tasks;
-using FamilyTreeTools.CompareResults;
 
 namespace FamilyTreeTools.FamilyTreeSanityCheck
 {
@@ -333,7 +333,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
     }
 
     public void CreateArray()
-    { 
+    {
       sanityArray = new Dictionary<SanityProblemId, SanityProperty>();
       sanityArray.Add(SanityProblemId.parentLimitMin_e, parentLimitMin);
       sanityArray.Add(SanityProblemId.motherLimitMax_e, motherLimitMax);
@@ -411,7 +411,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
     {
       string url = "";
       IList<string> urls = person.GetUrlList();
-      if(urls.Count > 0)
+      if (urls.Count > 0)
       {
         url = urls[0];
       }
@@ -427,7 +427,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
     public string ToString(bool showRelation, bool html)
     {
       StringBuilder builder = new StringBuilder();
-      
+
       if (showRelation)
       {
         builder.Append(this.type + ":");
@@ -528,7 +528,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
     {
       RelationStack stack = new RelationStack();
 
-      foreach(Relation rel in this)
+      foreach (Relation rel in this)
       {
         stack.Add(rel);
       }
@@ -563,7 +563,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
     }
 
     public string GetDistance()
-    { 
+    {
       StringBuilder resultStr = new StringBuilder();
 
       RelDistance dist = Distance();
@@ -609,15 +609,15 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
     {
       int rootIndex = 0;
 
-      for( int i = 0; i < this.Count; i++)
+      for (int i = 0; i < this.Count; i++)
       {
-        switch(this[i].type)
+        switch (this[i].type)
         {
           case Relation.Type.Father:
           case Relation.Type.Mother:
           case Relation.Type.Parent:
             {
-              rootIndex = i;              
+              rootIndex = i;
             }
             break;
         }
@@ -760,7 +760,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
 
     private string Linefeed(bool html = false)
     {
-      if(html)
+      if (html)
       {
         return "<br/>" + FamilyUtility.GetLinefeed();
       }
@@ -771,12 +771,12 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
     {
       StringBuilder strBuilder = new StringBuilder();
 
-      if(html)
+      if (html)
       {
         strBuilder.Append("<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"/><title> Relations </title ></head ><body>" + Linefeed());
       }
 
-      if(sourceTree != null)
+      if (sourceTree != null)
       {
         strBuilder.Append(sourceTree);
       }
@@ -787,7 +787,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
       }
       strBuilder.Append(Linefeed(html));
 
-      foreach(RelationStack rel in relations)
+      foreach (RelationStack rel in relations)
       {
         strBuilder.Append(rel.ToString(html));
       }
@@ -884,7 +884,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
       {
         problemList = new List<SanityProblem>();
       }
-      if(this.duplicate == null)
+      if (this.duplicate == null)
       {
         this.duplicate = new List<string>();
       }
@@ -899,7 +899,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
       {
         trace.TraceEvent(TraceEventType.Error, 0, "Error: Generation depth mismatch: " + depth + " " + relationStack.Count + " = " + relationStack.Generations());
       }*/
-      if(relationStack != null)
+      if (relationStack != null)
       {
         this.relationPath = relationStack.Duplicate();
         if (relationStack.GetLast() != xref)
@@ -913,11 +913,11 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
     {
       StringBuilder result = new StringBuilder();
 
-      foreach(SanityProblem problem in problemList)
+      foreach (SanityProblem problem in problemList)
       {
-        if((limits == null) || limits.sanityArray[problem.id].active)
+        if ((limits == null) || limits.sanityArray[problem.id].active)
         {
-          if(result.Length > 0)
+          if (result.Length > 0)
           {
             result.Append("; ");
           }
@@ -967,7 +967,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
     {
       trace.TraceInformation("Add to existing root person:" + number);
       //bool duplicateExists = false;
-      foreach(RelationStack stack in relationStackList)
+      foreach (RelationStack stack in relationStackList)
       {
         bool duplicate = false;
         if (stack.Count == relationStack.Count)
@@ -981,7 +981,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
             }
           }
         }
-        if(duplicate)
+        if (duplicate)
         {
           //duplicateExists = true;
           //trace.TraceEvent(TraceEventType.Error, 0, "Error: Add to existing root person:Duplication!");
@@ -1083,7 +1083,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
       youngestAtEvent= TimeSpan.FromDays(100000);
       oldestParent = TimeSpan.FromDays(0);
       oldestAtEvent = TimeSpan.FromDays(0);*/
-      
+
       trace.TraceData(TraceEventType.Information, 0, "Analysis of " + ancestorGenerationNo + " / " + descendantGenerationNo + "started at " + startTime);
 
 
@@ -1132,7 +1132,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
 
     public AncestorLineInfo GetAncestor(string person)
     {
-      if(ancestorList.ContainsKey(person))
+      if (ancestorList.ContainsKey(person))
       {
         return ancestorList[person];
       }
@@ -1141,7 +1141,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
 
     private string GetSexString(IndividualClass.IndividualSexType sex)
     {
-      switch(sex)
+      switch (sex)
       {
         case IndividualClass.IndividualSexType.Unknown:
           return "Unknown";
@@ -1157,19 +1157,19 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
     {
       string url = "";
       IList<string> urlList = person.GetUrlList();
-      if(urlList.Count > 0)
+      if (urlList.Count > 0)
       {
         url = urlList[0];
       }
-      AddToList(person.GetXrefName(), 
-                person.GetName(), 
-                url, 
+      AddToList(person.GetXrefName(),
+                person.GetName(),
+                url,
                 GetSexString(person.GetSex()),
-                AncestorStatistics.GetEventDateString(person, IndividualEventClass.EventType.Birth), 
-                AncestorStatistics.GetEventDateString(person, IndividualEventClass.EventType.Death), 
-                relationStack, 
-                depth, 
-                id, 
+                AncestorStatistics.GetEventDateString(person, IndividualEventClass.EventType.Birth),
+                AncestorStatistics.GetEventDateString(person, IndividualEventClass.EventType.Death),
+                relationStack,
+                depth,
+                id,
                 description, duplicateUrl);
 
     }
@@ -1194,7 +1194,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
           ancestorList[rootAncestor].duplicate.Add(duplicateUrl);
         }
 
-        if(this.updateCallback != null)
+        if (this.updateCallback != null)
         {
           this.updateCallback(ancestorList[rootAncestor]);
         }
@@ -1288,23 +1288,23 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
     {
       trace.TraceInformation("CheckRelatedFamilies(" + individual.GetName() + ")");
 
-      foreach(FamilyXrefClass familyXref in individual.GetFamilySpouseList())
+      foreach (FamilyXrefClass familyXref in individual.GetFamilySpouseList())
       {
         FamilyClass family = familyTree.GetFamily(familyXref.GetXrefName());
-        if(family != null)
+        if (family != null)
         {
           bool personFound = false;
-          foreach(IndividualXrefClass parent in family.GetParentList())
+          foreach (IndividualXrefClass parent in family.GetParentList())
           {
-            if(parent.GetXrefName() == individual.GetXrefName())
+            if (parent.GetXrefName() == individual.GetXrefName())
             {
               personFound = true;
               break;
             }
           }
-          if(!personFound)
+          if (!personFound)
           {
-            trace.TraceData(TraceEventType.Warning, 0, "Could not find person reference in parent family " + individual.GetName() + " " +  familyXref.GetXrefName());
+            trace.TraceData(TraceEventType.Warning, 0, "Could not find person reference in parent family " + individual.GetName() + " " + familyXref.GetXrefName());
           }
         }
         else
@@ -1391,7 +1391,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
         {
           trace.TraceData(TraceEventType.Warning, 0, "Could not find child individual " + family.GetXrefName() + " " + individualXref.GetXrefName());
         }
-      }    
+      }
     }
 
     private bool CheckValidMapPlace(IndividualEventClass ev)
@@ -1417,7 +1417,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
       IndividualEventClass death = person.GetEvent(IndividualEventClass.EventType.Death);
       IndividualClass.IndividualSexType sex = person.GetSex();
 
-      if(person.GetName().Length <= 4)
+      if (person.GetName().Length <= 4)
       {
         trace.TraceInformation("Abort, short name (like N N) (" + person.GetName() + ")");
         return;
@@ -1442,7 +1442,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
         if (limits.endYear.active && (birth.GetDate().ToDateTime().Year > limits.endYear.value) && (depth > DistantRecentLimit))
         {
           int relDepth = -1;
-          if(relationStack != null)
+          if (relationStack != null)
           {
             RelationStack.RelDistance dist = relationStack.Distance();
             relDepth = dist.ancestorGen + dist.descendantGen + dist.marriageNo;
@@ -1584,7 +1584,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
 
       if (birthDate != null)
       {
-        AddToList(person, relationStack, depth, birthEvType, birthDate + " birth date" );
+        AddToList(person, relationStack, depth, birthEvType, birthDate + " birth date");
       }
       else
       {
@@ -1613,7 +1613,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
         }
         AddToList(person, relationStack, depth, deathEvType, deathDate + " death date" + append);
       }
-      else if(person.GetIsAlive() != IndividualClass.Alive.Yes)
+      else if (person.GetIsAlive() != IndividualClass.Alive.Yes)
       {
         if (!deathPlaceKnown)
         {
@@ -1683,7 +1683,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
       Relation.Type lastRel = Relation.Type.Unknown;
       Relation.Type currRel = Relation.Type.Unknown;
 
-      if(lastPerson == currentPerson)
+      if (lastPerson == currentPerson)
       {
         return Relation.Type.Same;
       }
@@ -1777,7 +1777,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
       IndividualClass mother = null;
       IndividualClass father = null;*/
 
-      if(family == null)
+      if (family == null)
       {
         trace.TraceData(TraceEventType.Error, 0, " SanityCheckFamily Error: family == null");
         return;
@@ -1822,7 +1822,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
 
               if ((birth != null) && birth.GetDate().ValidDate() && (depth > DistantRecentLimit))
               {
-                if(limits.endYear.active && (birth.GetDate().ToDateTime().Year > limits.endYear.value))
+                if (limits.endYear.active && (birth.GetDate().ToDateTime().Year > limits.endYear.value))
                 {
                   trace.TraceInformation(" Abort distant, recent family" + family.GetXrefName());
                   return;
@@ -1928,7 +1928,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
                 //missingParents = false;
                 noOfParents = -1;
               }
-              if(sampleChildName == null)
+              if (sampleChildName == null)
               {
                 sampleChildName = child.GetName();
               }
@@ -1956,7 +1956,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
                     if (yearsAfterMarriage < 0)
                     {
                       RelationStack stack = CopyStackAndAddPerson(relationStack, family, child);
-                      AddToList(child, stack, depth + 1, SanityCheckLimits.SanityProblemId.parentLimitMin_e, "Child born in " + birthTime.Year + ", "  + -yearsAfterMarriage + " years before marriage in " + marriageDate.Year);
+                      AddToList(child, stack, depth + 1, SanityCheckLimits.SanityProblemId.parentLimitMin_e, "Child born in " + birthTime.Year + ", " + -yearsAfterMarriage + " years before marriage in " + marriageDate.Year);
                     }
                   }
                   // Only compare those where we know at least birth month for close births...
@@ -2036,7 +2036,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
           DateTime lastBirth = DateTime.MinValue;
 
           IndividualClass parent = parentRef;
-          if(mother.person != null)
+          if (mother.person != null)
           {
             parent = mother.person;
           }
@@ -2451,7 +2451,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
                   {
                     string appended = "";
 
-                    if(SearchKeyword(person, "oäkta;bastard"))
+                    if (SearchKeyword(person, "oäkta;bastard"))
                     {
                       appended = " (Note: Bastard)";
                     }
@@ -2469,7 +2469,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
             }
             else if ((noOfParents > 2) || (parentFamilyList.Count > 1))
             {
-              string familyList = ""; 
+              string familyList = "";
               foreach (FamilyXrefClass familyXref in parentFamilyList)
               {
                 PedigreeType pedigreeType = GetPedigreeType(familyXref, person.GetXrefName());
@@ -2531,7 +2531,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
                     }
                   }
                 }
-              } 
+              }
               else
               {
                 trace.TraceData(TraceEventType.Error, 0, "Error: person:" + person.GetXrefName() + " " + person.GetName() + "'s spousefamily " + familyXref + " == null");
@@ -2709,7 +2709,8 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
           {
             AddToList(person1full, thisRelationStack, thisGenerations, SanityCheckLimits.SanityProblemId.duplicateCheck_e, builder.ToString());
           }
-        } else
+        }
+        else
         {
           trace.TraceEvent(TraceEventType.Warning, 0, "no urls ");
         }
@@ -2741,7 +2742,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
         if (progressReporter != null)
         {
           progressReporter.ReportProgress(100.0 * counter / xrefList.Count, "Analyzing: " + counter + " profiles of " + xrefList.Count + " . Found " + ancestorList.Count + " problems...");
-          if(progressReporter.CheckIfStopRequested())
+          if (progressReporter.CheckIfStopRequested())
           {
             break;
           }
@@ -2934,17 +2935,17 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
     private static readonly TraceSource trace = new TraceSource("CheckRelation", SourceLevels.Warning);
     private bool IsSubsetOf(RelationStack smallStack, RelationStack bigStack)
     {
-      foreach(Relation sRel in smallStack)
+      foreach (Relation sRel in smallStack)
       {
         bool subset = false;
         foreach (Relation bRel in bigStack)
         {
-          if(sRel.personXref == bRel.personXref)
+          if (sRel.personXref == bRel.personXref)
           {
             subset = true;
           }
         }
-        if(!subset)
+        if (!subset)
         {
           return false;
         }
@@ -2961,7 +2962,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
       int maxGenerations = Math.Max(person1.Count, person2.Count);
       int diffGenerations = maxGenerations - minGenerations;
 
-      switch(minGenerations)
+      switch (minGenerations)
       {
         case 1:
           str = "the same person";
@@ -2985,17 +2986,17 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
           str = (minGenerations - 2) + "-th cousin";
           break;
       }
-      if(diffGenerations != 0)
+      if (diffGenerations != 0)
       {
-        switch(diffGenerations)
+        switch (diffGenerations)
         {
-          case 1: 
+          case 1:
             str += " once removed";
             break;
-          case 2: 
+          case 2:
             str += " twice removed";
             break;
-          default: 
+          default:
             str += " " + diffGenerations + " times removed";
             break;
         }
@@ -3064,32 +3065,32 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
         {
           IList<RelationStack> person1verified = new List<RelationStack>();
           IList<RelationStack> person2verified = new List<RelationStack>();
-          IDictionary<string,RelationStack> person1Ancestors = new Dictionary<string,RelationStack>();
-          IDictionary<string,RelationStack> person2Ancestors = new Dictionary<string,RelationStack>();
+          IDictionary<string, RelationStack> person1Ancestors = new Dictionary<string, RelationStack>();
+          IDictionary<string, RelationStack> person2Ancestors = new Dictionary<string, RelationStack>();
 
           LoadAncestors(familyTree, person1, ref person1Ancestors, noOfGenerations, Relation.GetSex(person1), null, 0.0, progress, " Loading ancestors to " + person1.GetName().ToString() + " (1/2) ");
           LoadAncestors(familyTree, person2, ref person2Ancestors, noOfGenerations, Relation.GetSex(person2), null, 0.0, progress, " Loading ancestors to " + person2.GetName().ToString() + " (2/2) ");
 
-          IEnumerator<KeyValuePair<string,RelationStack>> person1enum = person1Ancestors.GetEnumerator();
+          IEnumerator<KeyValuePair<string, RelationStack>> person1enum = person1Ancestors.GetEnumerator();
 
-          while(person1enum.MoveNext())
+          while (person1enum.MoveNext())
           {
             IEnumerator<KeyValuePair<string, RelationStack>> person2enum = person2Ancestors.GetEnumerator();
 
             while (person2enum.MoveNext())
             {
-              if(person1enum.Current.Key == person2enum.Current.Key)
+              if (person1enum.Current.Key == person2enum.Current.Key)
               {
                 bool duplicate = false;
                 trace.TraceInformation("Found match!" + person1verified.Count);
 
 
-                for(int i = 0; i < person1verified.Count; i++)
+                for (int i = 0; i < person1verified.Count; i++)
                 {
                   RelationStack stack1 = person1verified[i];
                   RelationStack stack2 = person2verified[i];
 
-                  if(IsSubsetOf(stack1, person1enum.Current.Value) && IsSubsetOf(stack2, person2enum.Current.Value))
+                  if (IsSubsetOf(stack1, person1enum.Current.Value) && IsSubsetOf(stack2, person2enum.Current.Value))
                   {
                     duplicate = true;
                     trace.TraceInformation("Don't add this. Duplicate of number " + i);
@@ -3097,7 +3098,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
                     trace.TraceInformation(person2enum.Current.Value.ToString(false));
                   }
                 }
-                if(!duplicate)
+                if (!duplicate)
                 {
                   trace.TraceInformation("Unique match, added!");
                   person1verified.Add(person1enum.Current.Value);
@@ -3117,7 +3118,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
             //trace.TraceInformation(person1verified[i].ToString(familyTree));
             //trace.TraceInformation(person2verified[i].ToString(familyTree));
 
-            if((person1verified[i].Count >= 1) && (person2verified[i].Count >= 1))
+            if ((person1verified[i].Count >= 1) && (person2verified[i].Count >= 1))
             {
               if (person1verified[i][person1verified[i].Count - 1].personXref == person2verified[i][person2verified[i].Count - 1].personXref)
               {
@@ -3236,7 +3237,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
                     if (progressReporter != null)
                     {
                       progressReporter.ReportProgress(progressPercent * 100.0, progressDescription + ancestors.Count);
-                      if(progressReporter.CheckIfStopRequested())
+                      if (progressReporter.CheckIfStopRequested())
                       {
                         StopRequested = true;
                       }

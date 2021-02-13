@@ -1,10 +1,9 @@
-﻿using System;
+﻿using FamilyTreeLibrary.FamilyData;
+using FamilyTreeLibrary.FamilyTreeStore;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.Serialization;
-using System.Text.Json;
-using FamilyTreeLibrary.FamilyData;
-using FamilyTreeLibrary.FamilyTreeStore;
 
 namespace FamilyTreeTools.CompareResults
 {
@@ -78,7 +77,7 @@ namespace FamilyTreeTools.CompareResults
 
       public string MinimizeName(string name)
       {
-        foreach(NameEquivalences eq in equivalentNames)
+        foreach (NameEquivalences eq in equivalentNames)
         {
           name = eq.MinimizeName(name);
         }
@@ -302,7 +301,7 @@ namespace FamilyTreeTools.CompareResults
               {
                 if (ComparePerson(person1, person2, nameEqDb))
                 {
-                  trace.TraceData(TraceEventType.Information, 0, "   2:" + person2.GetName() + " " + person1.GetXrefName()+ " " + person2.GetXrefName());
+                  trace.TraceData(TraceEventType.Information, 0, "   2:" + person2.GetName() + " " + person1.GetXrefName() + " " + person2.GetXrefName());
                   reportDuplicate(familyTree1, person1.GetXrefName(), familyTree2, person2.GetXrefName());
                 }
                 cnt2++;
@@ -381,7 +380,7 @@ namespace FamilyTreeTools.CompareResults
                   }
                 } while (iterator3.MoveNext());
                 iterator3.Dispose();
-                trace.TraceInformation(" Married name "+ marriedName + " matched to " + cnt3);
+                trace.TraceInformation(" Married name " + marriedName + " matched to " + cnt3);
               }
             }
           }
@@ -415,7 +414,7 @@ namespace FamilyTreeTools.CompareResults
           {
             trace.TraceData(TraceEventType.Information, 0, " 1:" + cnt1 + " " + person1.GetName());
             SearchDuplicates(person1, familyTree1, familyTree2, reportDuplicate, reporter, equivDb);
-          } 
+          }
           else
           {
             trace.TraceData(TraceEventType.Warning, 0, " 1: person is null" + cnt1);
