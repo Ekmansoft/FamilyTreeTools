@@ -2,15 +2,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <Company>Kenneth Ekman</Company>
+    <Company>Ekmansoft</Company>
     <Authors>Kenneth Ekman</Authors>
     <PackageLicenseFile>LICENSE-2.0.txt</PackageLicenseFile>
     <NeutralLanguage>en</NeutralLanguage>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <RepositoryUrl>https://github.com/endian02/FamilyTreeTools</RepositoryUrl>
+    <RepositoryUrl>https://github.com/Ekmansoft/FamilyTreeTools</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>Genealogy</PackageTags>
-    <PackageId>endian.FamilyTree.Tools</PackageId>
+    <PackageId>Ekmansoft.FamilyTree.Tools</PackageId>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\FamilyTreeLibrary\FamilyTreeLibrary.csproj" />
