@@ -781,10 +781,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
         strBuilder.Append(sourceTree);
       }
       strBuilder.Append(Linefeed(html));
-      if (time != null)
-      {
-        strBuilder.Append(time.ToString());
-      }
+      strBuilder.Append(time.ToString());
       strBuilder.Append(Linefeed(html));
 
       foreach (RelationStack rel in relations)
@@ -1891,7 +1888,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
           }
           if ((marriage == null) && (mother.person != null) && (father.person != null))
           {
-            if ((father.person.GetName().Length > 5) && (mother.birth != null) && (father.birth != null))
+            if (father.person.GetName().Length > 5)
             {
               trace.TraceInformation(" Missing marriage date " + family.GetXrefName());
               RelationStack stack = CopyStackAndAddPerson(relationStack, family, mother.person);
