@@ -124,7 +124,7 @@ namespace FamilyTreeTools.CompareResults
             }
           }
         }
-        trace.TraceInformation("Name [" + fullName + "] simplifies to [" + string.Join(" ", resultNames) + "]");
+        trace.TraceData(TraceEventType.Warning, 0, "Name [" + fullName + "] simplifies to [" + string.Join(" ", resultNames) + "]");
         return string.Join(" ", resultNames);
       }
       public void LoadDefault()
