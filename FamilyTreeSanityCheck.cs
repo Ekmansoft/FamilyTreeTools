@@ -80,7 +80,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
 
     static public IndividualStatus CheckCorrectness(IFamilyTreeStoreBaseClass familyTree, IndividualClass person)
     {
-      IndividualStatus status = new IndividualStatus();
+      IndividualStatus status = new();
 
       if (person != null)
       {
@@ -426,7 +426,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
     }
     public string ToString(bool showRelation, bool html)
     {
-      StringBuilder builder = new StringBuilder();
+      StringBuilder builder = new();
 
       if (showRelation)
       {
@@ -505,7 +505,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
     }
     public string ToString(bool html)
     {
-      StringBuilder strBuilder = new StringBuilder();
+      StringBuilder strBuilder = new();
       strBuilder.Append(CalculateRelation(html) + Linefeed(html));
 
 
@@ -515,7 +515,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
       }
       return strBuilder.ToString();
     }
-    private string Linefeed(bool html = false)
+    private static string Linefeed(bool html = false)
     {
       if (html)
       {
@@ -526,7 +526,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
 
     public RelationStack Duplicate()
     {
-      RelationStack stack = new RelationStack();
+      RelationStack stack = new();
 
       foreach (Relation rel in this)
       {
@@ -564,7 +564,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
 
     public string GetDistance()
     {
-      StringBuilder resultStr = new StringBuilder();
+      StringBuilder resultStr = new();
 
       RelDistance dist = Distance();
 
@@ -758,7 +758,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
       relations = new List<RelationStack>();
     }
 
-    private string Linefeed(bool html = false)
+    private static string Linefeed(bool html = false)
     {
       if (html)
       {
@@ -769,7 +769,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
 
     public string ToString(IFamilyTreeStoreBaseClass familyTree, bool html)
     {
-      StringBuilder strBuilder = new StringBuilder();
+      StringBuilder strBuilder = new();
 
       if (html)
       {
@@ -842,7 +842,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
   [DataContract]
   public class AncestorLineInfo
   {
-    private static readonly TraceSource trace = new TraceSource("AncestorLineInfo", SourceLevels.Warning);
+    private static readonly TraceSource trace = new("AncestorLineInfo", SourceLevels.Warning);
 
     [DataMember]
     public int depth;
@@ -908,7 +908,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
     }
     public string GetDetailString(SanityCheckLimits limits = null)
     {
-      StringBuilder result = new StringBuilder();
+      StringBuilder result = new();
 
       foreach (SanityProblem problem in problemList)
       {
@@ -945,7 +945,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
   [DataContract]
   public class HandledItem
   {
-    private static readonly TraceSource trace = new TraceSource("Sanity:HandledItem", SourceLevels.Warning);
+    private static readonly TraceSource trace = new("Sanity:HandledItem", SourceLevels.Warning);
     [DataMember]
     public string xref;
     [DataMember]
@@ -1002,9 +1002,9 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
   [DataContract]
   public class AncestorStatistics
   {
-    private static readonly TraceSource trace = new TraceSource("Sanity:AncestorStatistics", SourceLevels.Warning);
+    private static readonly TraceSource trace = new("Sanity:AncestorStatistics", SourceLevels.Warning);
     [DataMember]
-    private IDictionary<string, AncestorLineInfo> ancestorList;
+    private readonly IDictionary<string, AncestorLineInfo> ancestorList;
     private IFamilyTreeStoreBaseClass familyTree;
     //[DataMember]
     //private int people;//, duplicatePeople;
@@ -1013,18 +1013,18 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
     //[DataMember]
     //private IList<string> analysedFamilies;
     [DataMember]
-    private IList<string> sanityCheckedFamilies;
+    private readonly IList<string> sanityCheckedFamilies;
     [DataMember]
-    private IList<string> analysedPeople;
+    private readonly IList<string> analysedPeople;
+    //[DataMember]
+    //private readonly IList<HandledItem> analysedFamiliesNo;
     [DataMember]
-    private IList<HandledItem> analysedFamiliesNo;
+    private readonly IList<HandledItem> analysedPeopleNo;
     [DataMember]
-    private IList<HandledItem> analysedPeopleNo;
-    [DataMember]
-    private int descendantGenerationNo;
+    private readonly int descendantGenerationNo;
     //private SearchMode mode;
     //private double progress;
-    private DateTime startTime;
+    private readonly DateTime startTime;
     private DateTime endTime;
     /*private TimeSpan oldestParent;
     private TimeSpan youngestParent;
@@ -1033,12 +1033,12 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
     //private int maxNoOfChildren;
     //private int maxNoOfParents;
     [DataMember]
-    private SanityCheckLimits limits;
+    private readonly SanityCheckLimits limits;
     [DataMember]
-    private int ancestorGenerationNo;
-    private IProgressReporterInterface progressReporter;
+    private readonly int ancestorGenerationNo;
+    private readonly IProgressReporterInterface progressReporter;
     private double latestPercent;
-    AncestorUpdate updateCallback;
+    readonly AncestorUpdate updateCallback;
 
     RelationStack thisRelationStack;
     int thisGenerations;
@@ -1057,7 +1057,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
       //analysedFamilies = new List<string>();
       sanityCheckedFamilies = new List<string>();
       analysedPeople = new List<string>();
-      analysedFamiliesNo = new List<HandledItem>();
+      //analysedFamiliesNo = new List<HandledItem>();
       analysedPeopleNo = new List<HandledItem>();
       this.progressReporter = progressReporter;
       this.updateCallback = updateCallback;
@@ -1199,7 +1199,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
         return;
       }
 
-      AncestorLineInfo newInfo = new AncestorLineInfo(rootAncestor, name, url, sex, birth, death, relationStack, depth, id, description, duplicateUrl);
+      AncestorLineInfo newInfo = new(rootAncestor, name, url, sex, birth, death, relationStack, depth, id, description, duplicateUrl);
 
       if (this.updateCallback != null)
       {
@@ -1787,8 +1787,8 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
       }
       sanityCheckedFamilies.Add(family.GetXrefName());
       CheckRelatedIndividuals(family);
-      ParentInfo mother = new ParentInfo();
-      ParentInfo father = new ParentInfo();
+      ParentInfo mother = new();
+      ParentInfo father = new();
       string sampleChildName = null;
       IndividualEventClass marriage = family.GetEvent(IndividualEventClass.EventType.FamMarriage);
       IList<IndividualEventClass> evList = family.GetEventList();
@@ -2660,7 +2660,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
 
       if ((person1full != null) && (person2full != null))
       {
-        StringBuilder builder = new StringBuilder();
+        StringBuilder builder = new();
         builder.Append("Possible duplicate profile: ");
         builder.Append(person2full.GetName());
         builder.Append(" (");
@@ -2716,7 +2716,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
 
     public void AnalyseTree(IndividualClass person)
     {
-      RelationStack stack = new RelationStack();
+      RelationStack stack = new();
       AnalyseAncestors(person, 0, 0.0, stack);
       endTime = DateTime.Now;
       /*if (limits.duplicateCheck.active)
@@ -2909,7 +2909,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
 
     public JobInfo GetJobInfo(int jobId)
     {
-      JobInfo info = new JobInfo();
+      JobInfo info = new();
 
       info.Profiles = analysedPeople.Count;
       info.Families = sanityCheckedFamilies.Count;
@@ -2925,11 +2925,11 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
 
   public class CheckRelation
   {
-    private IProgressReporterInterface progressReporter;
+    private readonly IProgressReporterInterface progressReporter;
     private double latestPercent;
     private int totalGenerations;
     private bool StopRequested = false;
-    private static readonly TraceSource trace = new TraceSource("CheckRelation", SourceLevels.Warning);
+    private static readonly TraceSource trace = new("CheckRelation", SourceLevels.Warning);
     private bool IsSubsetOf(RelationStack smallStack, RelationStack bigStack)
     {
       foreach (Relation sRel in smallStack)
