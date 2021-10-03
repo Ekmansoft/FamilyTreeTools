@@ -236,10 +236,13 @@ namespace FamilyTreeTools.CompareResults
     static bool IsNamesEqual(string name1, string name2, NameEquivalenceDb nameEqDb)
     {
       name1 = NormalizeName(name1);
-      name1 = nameEqDb.SimplifyName(name1);
-
       name2 = NormalizeName(name2);
-      name2 = nameEqDb.SimplifyName(name2);
+
+      if (nameEqDb != null)
+      {
+        name1 = nameEqDb.SimplifyName(name1);
+        name2 = nameEqDb.SimplifyName(name2);
+      }
 
       return name1 == name2;
     }
