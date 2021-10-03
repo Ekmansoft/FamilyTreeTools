@@ -67,20 +67,32 @@ namespace FamilyTreeTools.CompareResults
       foreach (string name in subNames)
       {
         string lName = name.ToLower();
+        bool found = false;
         foreach (string eq in equivalentNames.Keys)
         {
           if (lName == eq)
           {
             //return name.ToLower();
             resultNames.Add(lName);
+            found = true;
+            break;
           }
         }
-        foreach (NameEquivalences eq in equivalentNames.Values)
+        if (!found)
         {
-          if (eq.IsEquivalent(name))
+          foreach (NameEquivalences eq in equivalentNames.Values)
           {
-            resultNames.Add(eq.baseName);
+            if (eq.IsEquivalent(lName))
+            {
+              resultNames.Add(eq.baseName);
+              found = true;
+              break;
+            }
           }
+        }
+        if (!found)
+        {
+          resultNames.Add(lName);
         }
       }
       trace.TraceData(TraceEventType.Warning, 0, "Name [" + fullName + "] simplifies to [" + string.Join(" ", resultNames) + "]");
