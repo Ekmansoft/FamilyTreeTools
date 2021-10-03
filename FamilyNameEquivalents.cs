@@ -95,11 +95,20 @@ namespace FamilyTreeTools.CompareResults
           resultNames.Add(lName);
         }
       }
-      trace.TraceData(TraceEventType.Information, 0, "Name [" + fullName + "] simplifies to [" + string.Join(" ", resultNames) + "]");
+      if (string.Join(" ", resultNames) != string.Join(" ", subNames))
+      {
+        trace.TraceData(TraceEventType.Information, 0, "Name [" + fullName + "] simplifies to [" + string.Join(" ", resultNames) + "]");
+      }
       return string.Join(" ", resultNames);
     }
     public void LoadDefault()
     {
+      AddEquivalent("adolf", "adolph");
+
+      AddEquivalent("gustaf", "gustav");
+
+      AddEquivalent("mikael", "michael");
+
       AddEquivalent("kristina", "christina");
       AddEquivalent("kristina", "stina");
       AddEquivalent("kristina", "cristina");
@@ -135,6 +144,7 @@ namespace FamilyTreeTools.CompareResults
       AddEquivalent("persson", "pehrson");
       AddEquivalent("persson", "persdotter");
       AddEquivalent("persson", "pehrsdotter");
+      PrintDb();
     }
 
     void PrintDb()
