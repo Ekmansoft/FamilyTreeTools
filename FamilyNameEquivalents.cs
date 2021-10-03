@@ -58,10 +58,15 @@ namespace FamilyTreeTools.CompareResults
         equivalentNames.Add(baseName, variant);
       }
     }
+    static string NormalizeName(string name)
+    {
+      return name.ToLower().Replace("w", "v").Replace("  ", " ").Replace("*", "").Replace("å", "a").Replace("ä", "a").Replace("ö", "o").Replace("é", "e");
+    }
 
     public string SimplifyName(string fullName)
     {
-      IList<string> subNames = fullName.Split(" ");
+
+      IList<string> subNames = NormalizeName(fullName).Split(" ");
       IList<string> resultNames = new List<string>();
 
       foreach (string name in subNames)
@@ -95,7 +100,7 @@ namespace FamilyTreeTools.CompareResults
           resultNames.Add(lName);
         }
       }
-      if (string.Join(" ", resultNames) != string.Join(" ", subNames))
+      if (string.Join(" ", resultNames) != fullName)
       {
         trace.TraceData(TraceEventType.Information, 0, "Name [" + fullName + "] simplifies to [" + string.Join(" ", resultNames) + "]");
       }
