@@ -60,7 +60,7 @@ namespace FamilyTreeTools.CompareResults
     }
     static string NormalizeName(string name)
     {
-      return name.ToLower().Replace("w", "v").Replace("  ", " ").Replace("*", "").Replace("å", "a").Replace("ä", "a").Replace("ö", "o").Replace("é", "e");
+      return name.ToLower().Replace("w", "v").Replace("  ", " ").Replace("*", "").Replace("(", "").Replace(")", "").Replace("å", "a").Replace("ä", "a").Replace("ö", "o").Replace("é", "e");
     }
 
     public string SimplifyName(string fullName)
