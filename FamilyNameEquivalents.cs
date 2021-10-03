@@ -37,7 +37,7 @@ namespace FamilyTreeTools.CompareResults
 
   public class NameEquivalenceDb
   {
-    private static TraceSource trace = new TraceSource("NameEquivalents", SourceLevels.Warning);
+    private static TraceSource trace = new TraceSource("NameEquivalents", SourceLevels.Information);
     public IDictionary<string, NameEquivalences> equivalentNames;
 
     public NameEquivalenceDb()
@@ -95,7 +95,7 @@ namespace FamilyTreeTools.CompareResults
           resultNames.Add(lName);
         }
       }
-      trace.TraceData(TraceEventType.Warning, 0, "Name [" + fullName + "] simplifies to [" + string.Join(" ", resultNames) + "]");
+      trace.TraceData(TraceEventType.Information, 0, "Name [" + fullName + "] simplifies to [" + string.Join(" ", resultNames) + "]");
       return string.Join(" ", resultNames);
     }
     public void LoadDefault()
@@ -135,7 +135,17 @@ namespace FamilyTreeTools.CompareResults
       AddEquivalent("persson", "pehrson");
       AddEquivalent("persson", "persdotter");
       AddEquivalent("persson", "pehrsdotter");
+    }
 
+    void PrintDb()
+    {
+      trace.TraceData(TraceEventType.Information, 0, "eq-names:" + equivalentNames.Count);
+
+      foreach (NameEquivalences eq in equivalentNames.Values)
+      {
+        trace.TraceData(TraceEventType.Information, 0, "base:" + eq.baseName);
+        trace.TraceData(TraceEventType.Information, 0, "eq  :" + string.Join(",", eq.equivalentNames));
+      }
     }
   }
 
