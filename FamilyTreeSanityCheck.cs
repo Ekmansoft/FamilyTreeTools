@@ -1039,7 +1039,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
     private readonly IProgressReporterInterface progressReporter;
     private double latestPercent;
     readonly AncestorUpdate updateCallback;
-
+    NameEquivalenceDb equivDb;
     RelationStack thisRelationStack;
     int thisGenerations;
 
@@ -1083,6 +1083,8 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
 
       trace.TraceData(TraceEventType.Information, 0, "Analysis of " + ancestorGenerationNo + " / " + descendantGenerationNo + "started at " + startTime);
 
+      equivDb = new DefaultNameEquivalenceDb();
+      equivDb.LoadDefault();
 
     }
 
@@ -1628,7 +1630,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
       {
         thisRelationStack = relationStack;
         thisGenerations = depth;
-        CompareTreeClass.SearchDuplicates(person, familyTree, familyTree, ReportMatchingProfiles, progressReporter);
+        CompareTreeClass.SearchDuplicates(person, familyTree, familyTree, ReportMatchingProfiles, progressReporter, equivDb);
       }
 
     }
