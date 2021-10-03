@@ -54,6 +54,7 @@ namespace FamilyTreeTools.CompareResults
       if (equivalentNames.TryGetValue(baseName, out variant))
       {
         variant.AddEquivalent(equivalence);
+        equivalentNames.Remove(variant.baseName);
         equivalentNames.Add(baseName, variant);
       }
     }
