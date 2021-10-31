@@ -201,6 +201,10 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
     public SanityProperty shortAddress;
     [DataMember]
     public SanityProperty unknownGpsPosition;
+    [DataMember]
+    public SanityProperty missingMother;
+    [DataMember]
+    public SanityProperty missingFather;
 
     public IDictionary<SanityProblemId, SanityProperty> sanityArray;
 
@@ -233,6 +237,8 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
       shortAddress_e,
       unknownGpsPosition_e,
       missingPartnerMitigated_e,
+      missingMother_e,
+      missingFather_e,
     }
 
     public SanityCheckLimits()
@@ -289,6 +295,12 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
 
       parentsMissing = new SanityProperty();
       parentsMissing.active = true;
+
+      missingMother = new SanityProperty();
+      missingMother.active = true;
+
+      missingFather = new SanityProperty();
+      missingFather.active = true;
 
       parentsProblem = new SanityProperty();
       parentsProblem.active = true;
@@ -361,6 +373,8 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
       sanityArray.Add(SanityProblemId.oldPrivateProfile_e, oldPrivateProfile);
       sanityArray.Add(SanityProblemId.shortAddress_e, shortAddress);
       sanityArray.Add(SanityProblemId.unknownGpsPosition_e, unknownGpsPosition);
+      sanityArray.Add(SanityProblemId.missingMother_e, missingMother);
+      sanityArray.Add(SanityProblemId.missingFather_e, missingFather);
     }
   }
 
@@ -2432,15 +2446,53 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
             {
               int noOfSpouses = NumberOfSpouses(spouseFamilyList);
               AddToList(person, relationStack, depth, SanityCheckLimits.SanityProblemId.parentsMissing_e, "No parents or children and " + noOfSpouses + " spouses");
+              AddToList(person, relationStack, depth, SanityCheckLimits.SanityProblemId.missingMother_e, "No mother");
+              AddToList(person, relationStack, depth, SanityCheckLimits.SanityProblemId.missingFather_e, "No father");
             }
             else if (noOfParents == 0)
             {
               AddToList(person, relationStack, depth, SanityCheckLimits.SanityProblemId.parentsMissing_e, "No parents");
+              AddToList(person, relationStack, depth, SanityCheckLimits.SanityProblemId.missingMother_e, "No mother");
+              AddToList(person, relationStack, depth, SanityCheckLimits.SanityProblemId.missingFather_e, "No father");
             }
           }
 
           if (parentFamilyList != null)
           {
+            int biologicalMotherCount = 0;
+            int biologicalFatherCount = 0;
+            foreach (FamilyXrefClass familyXref in parentFamilyList)
+            {
+              FamilyClass family = familyTree.GetFamily(familyXref.GetXrefName());
+              PedigreeType pedigreeType = GetPedigreeType(familyXref, person.GetXrefName());
+              foreach (IndividualXrefClass parentXref in family.GetParentList())
+              {
+                IndividualClass parent = familyTree.GetIndividual(parentXref.GetXrefName());
+                switch (parent.GetSex())
+                {
+                  case IndividualClass.IndividualSexType.Female:
+                    if (pedigreeType == PedigreeType.Birth)
+                    {
+                      biologicalMotherCount++;
+                    }
+                    break;
+                  case IndividualClass.IndividualSexType.Male:
+                    if (pedigreeType == PedigreeType.Birth)
+                    {
+                      biologicalFatherCount++;
+                    }
+                    break;
+                }
+              }
+            }
+            if (biologicalMotherCount == 0)
+            {
+              AddToList(person, relationStack, depth, SanityCheckLimits.SanityProblemId.missingMother_e, "No biological mother");
+            }
+            if (biologicalFatherCount == 0)
+            {
+              AddToList(person, relationStack, depth, SanityCheckLimits.SanityProblemId.missingFather_e, "No biological father");
+            }
             if (noOfParents == 1)
             {
               IndividualClass.IndividualSexType parentSex = GetSingleParentSex(parentFamilyList);
@@ -2458,13 +2510,12 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
                   }
                   break;
                 case IndividualClass.IndividualSexType.Male:
-                  AddToList(person, relationStack, depth, SanityCheckLimits.SanityProblemId.parentsMissing_e, "Unknown mother");
+                  AddToList(person, relationStack, depth, SanityCheckLimits.SanityProblemId.missingMother_e, "No mother");
                   break;
                 case IndividualClass.IndividualSexType.Unknown:
-                  AddToList(person, relationStack, depth, SanityCheckLimits.SanityProblemId.parentsMissing_e, "Only one parent");
+                  AddToList(person, relationStack, depth, SanityCheckLimits.SanityProblemId.parentsMissing_e, "Only one parent (unknown sex on parent)");
                   break;
               }
-              //}
             }
             else if ((noOfParents > 2) || (parentFamilyList.Count > 1))
             {
@@ -2504,6 +2555,11 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
 
               SanityCheckFamily(family, relationStack, depth);
             }
+          } 
+          else
+          {
+            AddToList(person, relationStack, depth, SanityCheckLimits.SanityProblemId.missingMother_e, "No biological mother");
+            AddToList(person, relationStack, depth, SanityCheckLimits.SanityProblemId.missingFather_e, "No biological father");
           }
 
           if (spouseFamilyList != null)
