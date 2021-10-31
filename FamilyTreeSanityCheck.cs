@@ -205,6 +205,8 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
     public SanityProperty missingMother;
     [DataMember]
     public SanityProperty missingFather;
+    [DataMember]
+    public SanityProperty missingFatherBastard;
 
     public IDictionary<SanityProblemId, SanityProperty> sanityArray;
 
@@ -239,6 +241,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
       missingPartnerMitigated_e,
       missingMother_e,
       missingFather_e,
+      missingFatherBastard_e,
     }
 
     public SanityCheckLimits()
@@ -301,6 +304,9 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
 
       missingFather = new SanityProperty();
       missingFather.active = true;
+
+      missingFatherBastard = new SanityProperty();
+      missingFatherBastard.active = true;
 
       parentsProblem = new SanityProperty();
       parentsProblem.active = true;
@@ -375,6 +381,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
       sanityArray.Add(SanityProblemId.unknownGpsPosition_e, unknownGpsPosition);
       sanityArray.Add(SanityProblemId.missingMother_e, missingMother);
       sanityArray.Add(SanityProblemId.missingFather_e, missingFather);
+      sanityArray.Add(SanityProblemId.missingFatherBastard_e, missingFatherBastard);
     }
   }
 
@@ -2491,7 +2498,14 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
             }
             if (biologicalFatherCount == 0)
             {
-              AddToList(person, relationStack, depth, SanityCheckLimits.SanityProblemId.missingFather_e, "No biological father");
+              if (SearchKeyword(person, "oäkta;bastard"))
+              {
+                AddToList(person, relationStack, depth, SanityCheckLimits.SanityProblemId.missingFatherBastard_e, "No biological father (Note: Bastard)");
+              }
+              else
+              {
+                AddToList(person, relationStack, depth, SanityCheckLimits.SanityProblemId.missingFather_e, "No biological father");
+              }
             }
             if (noOfParents == 1)
             {
@@ -2506,7 +2520,7 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
                     {
                       appended = " (Note: Bastard)";
                     }
-                    AddToList(person, relationStack, depth, SanityCheckLimits.SanityProblemId.parentsMissing_e, "Unknown father" + appended);
+                    AddToList(person, relationStack, depth, SanityCheckLimits.SanityProblemId.missingFather_e, "Unknown father" + appended);
                   }
                   break;
                 case IndividualClass.IndividualSexType.Male:
