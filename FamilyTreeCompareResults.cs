@@ -47,7 +47,7 @@ namespace FamilyTreeTools.CompareResults
   {
     private static TraceSource trace = new TraceSource("CompareTrees", SourceLevels.Warning);
 
-    private static readonly string NameDbDatabaseFilename = "nameequivalencedb.json";
+    private static readonly string NameDbDatabaseFilename = "~/.nameequivalencedb.json";
 
     static string NormalizeName(string name)
     {
