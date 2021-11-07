@@ -3,14 +3,17 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.Serialization;
 using System.Text.Json;
 
 namespace FamilyTreeTools.CompareResults
 {
   public class NameEquivalences
   {
-    public string baseName;
-    public IList<string> equivalentNames;
+    [DataMember]
+    public string baseName { get; set; }
+    [DataMember]
+    public IList<string> equivalentNames { get; set; }
 
     public NameEquivalences(string baseName)
     {
@@ -41,7 +44,8 @@ namespace FamilyTreeTools.CompareResults
   public class NameEquivalenceDb
   {
     private static TraceSource trace = new TraceSource("NameEquivalents", SourceLevels.Information);
-    public IDictionary<string, NameEquivalences> equivalentNames;
+    [DataMember]
+    public IDictionary<string, NameEquivalences> equivalentNames { get; set; }
 
     private static readonly string NameDbDatabaseFilename = ".nameequivalencedb.json";
 
