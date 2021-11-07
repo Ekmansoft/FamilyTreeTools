@@ -134,6 +134,7 @@ namespace FamilyTreeTools.CompareResults
           string dbJson = NameEquivalenceDb.ToJson(db);
           wr.Write(dbJson);
           wr.Close();
+          trace.TraceData(TraceEventType.Information, 0, "File write " + filename + " done");
         }
         return true;
       }

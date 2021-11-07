@@ -311,7 +311,15 @@ namespace FamilyTreeTools.CompareResults
       {
         equivDb = new DefaultNameEquivalenceDb();
         equivDb.LoadDefault();
-        NameEquivalenceDb.SaveFile(NameDbDatabaseFilename, equivDb);
+        bool result = NameEquivalenceDb.SaveFile(NameDbDatabaseFilename, equivDb);
+        if (!result)
+        {
+          trace.TraceData(TraceEventType.Warning, 0, "File db write failed");
+        }
+        else
+        {
+          trace.TraceData(TraceEventType.Information, 0, "File db write ok");
+        }
       }
 
       iterator1 = familyTree1.SearchPerson(null, reporter);
