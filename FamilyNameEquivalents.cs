@@ -42,6 +42,8 @@ namespace FamilyTreeTools.CompareResults
     private static TraceSource trace = new TraceSource("NameEquivalents", SourceLevels.Information);
     public IDictionary<string, NameEquivalences> equivalentNames;
 
+    public static readonly string NameDbDatabaseFilename = "~/.nameequivalencedb.json";
+
     public NameEquivalenceDb()
     {
       equivalentNames = new Dictionary<string, NameEquivalences>();
@@ -119,13 +121,24 @@ namespace FamilyTreeTools.CompareResults
           if (fileDb != null)
           {
             fileDb.PrintDb();
+          } else
+          {
+            trace.TraceInformation("Name db read from " + filename + " failed");
           }
           return fileDb;
         }
       }
-      catch(System.Exception e)
+      catch (System.IO.FileNotFoundException e)
       {
-        trace.TraceData(TraceEventType.Warning, 0, "File read "+ filename + " failed" + e.ToString());
+        trace.TraceData(TraceEventType.Warning, 0, "File read fnfe " + filename + " failed" + e.ToString());
+      }
+      catch (System.Exception e)
+      {
+        trace.TraceData(TraceEventType.Warning, 0, "File read " + filename + " failed" + e.ToString());
+      }
+      finally 
+      {
+        trace.TraceData(TraceEventType.Warning, 0, "File read " + filename + " failed maybe");
       }
       return null;
     }
@@ -141,6 +154,10 @@ namespace FamilyTreeTools.CompareResults
           trace.TraceData(TraceEventType.Information, 0, "File write " + filename + " done");
         }
         return true;
+      }
+      catch (DirectoryNotFoundException e)
+      {
+        trace.TraceData(TraceEventType.Warning, 0, "File write dnfe " + filename + " failed" + e.ToString());
       }
       catch (System.Exception e)
       {

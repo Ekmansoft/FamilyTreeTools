@@ -47,8 +47,6 @@ namespace FamilyTreeTools.CompareResults
   {
     private static TraceSource trace = new TraceSource("CompareTrees", SourceLevels.Warning);
 
-    private static readonly string NameDbDatabaseFilename = "~/.nameequivalencedb.json";
-
     static string NormalizeName(string name)
     {
       return name.ToLower().Replace("  ", " ").Replace("*", "").Replace("(", "").Replace(")", "");
@@ -306,12 +304,12 @@ namespace FamilyTreeTools.CompareResults
       IEnumerator<IndividualClass> iterator1;
       int cnt1 = 0;
 
-      NameEquivalenceDb equivDb  = NameEquivalenceDb.LoadFile(NameDbDatabaseFilename);
+      NameEquivalenceDb equivDb = NameEquivalenceDb.LoadFile(NameEquivalenceDb.NameDbDatabaseFilename);
       if (equivDb == null)
       {
         equivDb = new DefaultNameEquivalenceDb();
         equivDb.LoadDefault();
-        bool result = NameEquivalenceDb.SaveFile(NameDbDatabaseFilename, equivDb);
+        bool result = NameEquivalenceDb.SaveFile(NameEquivalenceDb.NameDbDatabaseFilename, equivDb);
         if (!result)
         {
           trace.TraceData(TraceEventType.Warning, 0, "File db write failed");
