@@ -116,6 +116,10 @@ namespace FamilyTreeTools.CompareResults
         {
           string json = r.ReadToEnd();
           NameEquivalenceDb fileDb = FromJson(json);
+          if (fileDb != null)
+          {
+            fileDb.PrintDb();
+          }
           return fileDb;
         }
       }
