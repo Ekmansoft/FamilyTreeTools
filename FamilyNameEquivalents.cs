@@ -132,7 +132,7 @@ namespace FamilyTreeTools.CompareResults
         using (StreamWriter wr = new StreamWriter(filename))
         {
           string dbJson = NameEquivalenceDb.ToJson(db);
-          wr.WriteAsync(dbJson);
+          wr.Write(dbJson);
           wr.Close();
         }
         return true;
