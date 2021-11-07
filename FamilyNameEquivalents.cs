@@ -43,11 +43,29 @@ namespace FamilyTreeTools.CompareResults
     private static TraceSource trace = new TraceSource("NameEquivalents", SourceLevels.Information);
     public IDictionary<string, NameEquivalences> equivalentNames;
 
-    private static readonly string NameDbDatabaseFilename = "/.nameequivalencedb.json";
+    private static readonly string NameDbDatabaseFilename = ".nameequivalencedb.json";
 
     public static string GetDefaultFilePath()
     {
-      return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + NameDbDatabaseFilename;
+      string basePath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+
+      if (basePath.Length == 0)
+      {
+        basePath = Environment.GetFolderPath(Environment.SpecialFolder.CommonDesktopDirectory);
+      }
+      if (basePath.Length == 0)
+      {
+        basePath = Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments);
+      }
+      if (basePath.Length == 0)
+      {
+        basePath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+      }
+      if (basePath.Length > 0)
+      {
+        basePath = basePath + "/";
+      }
+      return basePath + NameDbDatabaseFilename;
     }
 
     public NameEquivalenceDb()
