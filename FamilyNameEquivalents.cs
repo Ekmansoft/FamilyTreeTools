@@ -1,4 +1,5 @@
 
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -42,7 +43,12 @@ namespace FamilyTreeTools.CompareResults
     private static TraceSource trace = new TraceSource("NameEquivalents", SourceLevels.Information);
     public IDictionary<string, NameEquivalences> equivalentNames;
 
-    public static readonly string NameDbDatabaseFilename = "~/.nameequivalencedb.json";
+    private static readonly string NameDbDatabaseFilename = "/.nameequivalencedb.json";
+
+    public static string GetDefaultFilePath()
+    {
+      return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + NameDbDatabaseFilename;
+    }
 
     public NameEquivalenceDb()
     {

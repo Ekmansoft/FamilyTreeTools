@@ -1104,12 +1104,12 @@ namespace FamilyTreeTools.FamilyTreeSanityCheck
 
       trace.TraceData(TraceEventType.Information, 0, "Analysis of " + ancestorGenerationNo + " / " + descendantGenerationNo + "started at " + startTime);
 
-      equivDb = NameEquivalenceDb.LoadFile(NameEquivalenceDb.NameDbDatabaseFilename);
+      equivDb = NameEquivalenceDb.LoadFile(NameEquivalenceDb.GetDefaultFilePath());
       if (equivDb == null)
       {
         equivDb = new DefaultNameEquivalenceDb();
         equivDb.LoadDefault();
-        bool result = NameEquivalenceDb.SaveFile(NameEquivalenceDb.NameDbDatabaseFilename, equivDb);
+        bool result = NameEquivalenceDb.SaveFile(NameEquivalenceDb.GetDefaultFilePath(), equivDb);
         if (!result)
         {
           trace.TraceData(TraceEventType.Warning, 0, "File db write failed");

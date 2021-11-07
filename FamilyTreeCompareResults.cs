@@ -304,12 +304,12 @@ namespace FamilyTreeTools.CompareResults
       IEnumerator<IndividualClass> iterator1;
       int cnt1 = 0;
 
-      NameEquivalenceDb equivDb = NameEquivalenceDb.LoadFile(NameEquivalenceDb.NameDbDatabaseFilename);
+      NameEquivalenceDb equivDb = NameEquivalenceDb.LoadFile(NameEquivalenceDb.GetDefaultFilePath());
       if (equivDb == null)
       {
         equivDb = new DefaultNameEquivalenceDb();
         equivDb.LoadDefault();
-        bool result = NameEquivalenceDb.SaveFile(NameEquivalenceDb.NameDbDatabaseFilename, equivDb);
+        bool result = NameEquivalenceDb.SaveFile(NameEquivalenceDb.GetDefaultFilePath(), equivDb);
         if (!result)
         {
           trace.TraceData(TraceEventType.Warning, 0, "File db write failed");
