@@ -1,6 +1,8 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Text.Json;
 
 namespace FamilyTreeTools.CompareResults
 {
@@ -106,6 +108,41 @@ namespace FamilyTreeTools.CompareResults
       }
       return string.Join(" ", resultNames);
     }
+    public static NameEquivalenceDb LoadFile(string filename)
+    {
+      try
+      {
+        using (StreamReader r = new StreamReader(filename))
+        {
+          string json = r.ReadToEnd();
+          NameEquivalenceDb fileDb = FromJson(json);
+          return fileDb;
+        }
+      }
+      catch(System.Exception e)
+      {
+        trace.TraceData(TraceEventType.Warning, 0, "File read "+ filename + " failed" + e.ToString());
+      }
+      return null;
+    }
+    public static bool SaveFile(string filename, NameEquivalenceDb db)
+    {
+      try
+      {
+        using (StreamWriter wr = new StreamWriter(filename))
+        {
+          string dbJson = NameEquivalenceDb.ToJson(db);
+          wr.WriteAsync(dbJson);
+          wr.Close();
+        }
+        return true;
+      }
+      catch (System.Exception e)
+      {
+        trace.TraceData(TraceEventType.Warning, 0, "File write " + filename + " failed" + e.ToString());
+      }
+      return false;
+    }
     public void LoadDefault()
     {
       AddEquivalent("adolf", "adolph");
@@ -162,6 +199,16 @@ namespace FamilyTreeTools.CompareResults
         trace.TraceData(TraceEventType.Information, 0, "eq  :" + string.Join(",", eq.equivalentNames));
       }
     }
+    public static NameEquivalenceDb FromJson(string json)
+    {
+      return JsonSerializer.Deserialize<NameEquivalenceDb>(json);
+    }
+
+    public static string ToJson(NameEquivalenceDb o)
+    {
+      return JsonSerializer.Serialize(o);
+    }
+
   }
 
   /*

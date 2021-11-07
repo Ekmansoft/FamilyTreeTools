@@ -47,7 +47,7 @@ namespace FamilyTreeTools.CompareResults
   {
     private static TraceSource trace = new TraceSource("CompareTrees", SourceLevels.Warning);
 
-
+    private static readonly string NameDbDatabaseFilename = "nameequivalencedb.json";
 
     static string NormalizeName(string name)
     {
@@ -306,8 +306,13 @@ namespace FamilyTreeTools.CompareResults
       IEnumerator<IndividualClass> iterator1;
       int cnt1 = 0;
 
-      NameEquivalenceDb equivDb = new DefaultNameEquivalenceDb();
-      equivDb.LoadDefault();
+      NameEquivalenceDb equivDb  = NameEquivalenceDb.LoadFile(NameDbDatabaseFilename);
+      if (equivDb == null)
+      {
+        equivDb = new DefaultNameEquivalenceDb();
+        equivDb.LoadDefault();
+        NameEquivalenceDb.SaveFile(NameDbDatabaseFilename, equivDb);
+      }
 
       iterator1 = familyTree1.SearchPerson(null, reporter);
 
