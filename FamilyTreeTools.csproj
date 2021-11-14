@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Company>Ekmansoft</Company>
     <Authors>Kenneth Ekman</Authors>
     <PackageLicenseFile>LICENSE-2.0.txt</PackageLicenseFile>
@@ -11,7 +11,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>Genealogy</PackageTags>
     <PackageId>Ekmansoft.FamilyTree.Tools</PackageId>
-    <Version>1.1.0</Version>
+    <Version>1.2.0</Version>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\FamilyTreeLibrary\FamilyTreeLibrary.csproj" />
