@@ -14,6 +14,7 @@
     <Version>1.2.0</Version>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="EkmanSoft.FamilyTree.Library" Version="1.2.0" />
     <ProjectReference Include="..\FamilyTreeLibrary\FamilyTreeLibrary.csproj" />
   </ItemGroup>
   <ItemGroup>
