@@ -1,8 +1,8 @@
-﻿using FamilyTreeLibrary.FamilyData;
-using FamilyTreeLibrary.FamilyTreeStore;
-//using FamilyTreeLibrary.FamilyTreeStore;
+﻿using Ekmansoft.FamilyTree.Library.FamilyData;
+using Ekmansoft.FamilyTree.Library.FamilyTreeStore;
+//using Ekmansoft.FamilyTree.Library.FamilyTreeStore;
 //using System.Threading.Tasks;
-using FamilyTreeTools.CompareResults;
+using Ekmansoft.FamilyTree.Tools.CompareResults;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace FamilyTreeTools.FamilyTreeSanityCheck
+namespace Ekmansoft.FamilyTree.Tools.FamilyTreeSanityCheck
 {
 
   public class FamilyStatusClass

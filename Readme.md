@@ -1,4 +1,4 @@
-### FamilyTreeTools
+### Ekmansoft.FamilyTree.Tools
 - Dotnet Core C# library for analysing and comparing genealogy family trees.
 
 ### Description
@@ -7,7 +7,7 @@
 
 ### Dependencies
 - Dotnet Core 6.0
-- FamilyTreeLibrary https://github.com/Ekmansoft/FamilyTreeLibrary
+- Ekmansoft.FamilyTree.Library https://github.com/Ekmansoft/FamilyTreeLibrary
 
 ### License 
 - Apache 2.0

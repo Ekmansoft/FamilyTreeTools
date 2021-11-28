@@ -1,11 +1,11 @@
-﻿using FamilyTreeLibrary.FamilyData;
-using FamilyTreeLibrary.FamilyTreeStore;
+﻿using Ekmansoft.FamilyTree.Library.FamilyData;
+using Ekmansoft.FamilyTree.Library.FamilyTreeStore;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.Serialization;
 
-namespace FamilyTreeTools.CompareResults
+namespace Ekmansoft.FamilyTree.Tools.CompareResults
 {
   class FamilyTreeCompareResults
   {

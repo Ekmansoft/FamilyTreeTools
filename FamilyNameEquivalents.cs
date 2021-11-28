@@ -6,7 +6,7 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Text.Json;
 
-namespace FamilyTreeTools.CompareResults
+namespace Ekmansoft.FamilyTree.Tools.CompareResults
 {
   public class NameEquivalences
   {
