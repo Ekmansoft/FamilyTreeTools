@@ -43,7 +43,7 @@ namespace Ekmansoft.FamilyTree.Tools.CompareResults
 
   public class NameEquivalenceDb
   {
-    private static TraceSource trace = new TraceSource("NameEquivalents", SourceLevels.Information);
+    private static TraceSource trace = new TraceSource("NameEquivalents", SourceLevels.Warning);
     [DataMember]
     public IDictionary<string, NameEquivalences> equivalentNames { get; set; }
 
