@@ -406,17 +406,17 @@ namespace Ekmansoft.FamilyTree.Tools.FamilyTreeSanityCheck
     }
 
     [DataMember]
-    public Type type;
+    public Type type { get; set; }
     [DataMember]
-    public string personXref;
+    public string personXref { get; set; }
     [DataMember]
-    public string name;
+    public string name { get; set; }
     [DataMember]
-    public string url;
+    public string url { get; set; }
     [DataMember]
-    public string birth;
+    public string birth { get; set; }
     [DataMember]
-    public string death;
+    public string death { get; set; }
 
     public Relation(Type type, string personXref, string name, string url, string birth, string death)
     {
@@ -768,11 +768,11 @@ namespace Ekmansoft.FamilyTree.Tools.FamilyTreeSanityCheck
   public class RelationStackList
   {
     [DataMember]
-    public string sourceTree;
+    public string sourceTree { get; set; }
     [DataMember]
-    public List<RelationStack> relations;
+    public List<RelationStack> relations { get; set; }
     [DataMember]
-    public DateTime time;
+    public DateTime time { get; set; }
 
     public RelationStackList()
     {
@@ -822,11 +822,11 @@ namespace Ekmansoft.FamilyTree.Tools.FamilyTreeSanityCheck
   public class SanityProblem
   {
     [DataMember]
-    public SanityCheckLimits.SanityProblemId id;
+    public SanityCheckLimits.SanityProblemId id { get; set; }
     [DataMember]
-    public string details;
+    public string details { get; set; }
     [DataMember]
-    public string url;
+    public string url { get; set; }
 
     public SanityProblem(SanityCheckLimits.SanityProblemId id, string details, string url = null)
     {
@@ -840,18 +840,18 @@ namespace Ekmansoft.FamilyTree.Tools.FamilyTreeSanityCheck
   public class JobInfo
   {
     [DataMember]
-    public int JobId;
+    public int JobId { get; set; }
     [DataMember]
-    public int Profiles;
+    public int Profiles { get; set; }
     [DataMember]
-    public int Families;
+    public int Families { get; set; }
     [DataMember]
-    public DateTime StartTime;
+    public DateTime StartTime { get; set; }
     [DataMember]
-    public DateTime EndTime;
+    public DateTime EndTime { get; set; }
 
     [DataMember]
-    public ICollection<AncestorLineInfo> IssueList;
+    public ICollection<AncestorLineInfo> IssueList { get; set; }
 
     public JobInfo()
     {
@@ -866,27 +866,27 @@ namespace Ekmansoft.FamilyTree.Tools.FamilyTreeSanityCheck
     private static readonly TraceSource trace = new("AncestorLineInfo", SourceLevels.Warning);
 
     [DataMember]
-    public int depth;
+    public int depth { get; set; }
     [DataMember]
-    public string rootAncestor;
+    public string rootAncestor { get; set; }
     [DataMember]
-    public string name;
+    public string name { get; set; }
     [DataMember]
-    public string url;
+    public string url { get; set; }
     [DataMember]
-    public string sex;
+    public string sex { get; set; }
     [DataMember]
-    public string birth;
+    public string birth { get; set; }
     [DataMember]
-    public string death;
+    public string death { get; set; }
     //[DataMember]
     //public string details;
     [DataMember]
-    public RelationStack relationPath;
+    public RelationStack relationPath { get; set; }
     [DataMember]
-    public IList<string> duplicate;
+    public IList<string> duplicate { get; set; }
     [DataMember]
-    public IList<SanityProblem> problemList;
+    public IList<SanityProblem> problemList { get; set; }
 
     public AncestorLineInfo(string xref, string name, string url, string sex, string birth, string death, RelationStack relationStack, int depth, SanityCheckLimits.SanityProblemId id, string detailString, string duplicateUrl)
     {
