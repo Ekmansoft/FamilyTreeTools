@@ -2458,23 +2458,16 @@ namespace Ekmansoft.FamilyTree.Tools.FamilyTreeSanityCheck
           IList<FamilyXrefClass> spouseFamilyList = person.GetFamilySpouseList();
 
           int noOfParents = NumberOfParents(parentFamilyList);
-          int noOfChildren = NumberOfChildren(spouseFamilyList);
+          int noOfSpouses = NumberOfSpouses(spouseFamilyList);
 
-          if (person.GetPublic())
+          if (noOfSpouses == 0)
           {
-            if ((noOfParents == 0) && (noOfChildren == 0))
-            {
-              int noOfSpouses = NumberOfSpouses(spouseFamilyList);
-              AddToList(person, relationStack, depth, SanityCheckLimits.SanityProblemId.parentsMissing_e, "No parents or children and " + noOfSpouses + " spouses");
-              AddToList(person, relationStack, depth, SanityCheckLimits.SanityProblemId.missingMother_e, "No mother");
-              AddToList(person, relationStack, depth, SanityCheckLimits.SanityProblemId.missingFather_e, "No father");
-            }
-            else if (noOfParents == 0)
-            {
-              AddToList(person, relationStack, depth, SanityCheckLimits.SanityProblemId.parentsMissing_e, "No parents");
-              AddToList(person, relationStack, depth, SanityCheckLimits.SanityProblemId.missingMother_e, "No mother");
-              AddToList(person, relationStack, depth, SanityCheckLimits.SanityProblemId.missingFather_e, "No father");
-            }
+            AddToList(person, relationStack, depth, SanityCheckLimits.SanityProblemId.missingPartner_e, "No spouse");
+          }
+          if (noOfParents == 0)
+          {
+            AddToList(person, relationStack, depth, SanityCheckLimits.SanityProblemId.missingMother_e, "No mother");
+            AddToList(person, relationStack, depth, SanityCheckLimits.SanityProblemId.missingFather_e, "No father");
           }
 
           if (parentFamilyList != null)
